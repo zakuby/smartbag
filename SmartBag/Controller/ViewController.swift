@@ -20,6 +20,7 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        hideKeyboardWhenTappedAround()
         setupCollectionView()
         observerUserInventory()
         // Do any additional setup after loading the view, typically from a nib.
@@ -31,7 +32,7 @@ class ViewController: UIViewController {
         layout.minimumInteritemSpacing = 12
         
         collectionViews = UICollectionView(frame: view.frame, collectionViewLayout: layout)
-        collectionViews.contentInset = UIEdgeInsets(top: 22, left: 0, bottom: 55, right: 0)
+        collectionViews.contentInset = UIEdgeInsets(top: 22, left: 0, bottom: 0, right: 0)
         collectionViews.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         collectionViews.showsVerticalScrollIndicator = false
         collectionViews.register(inventoryListCollectionViewCell.self, forCellWithReuseIdentifier: "inventoryCell")
@@ -132,3 +133,20 @@ extension ViewController: UICollectionViewDelegate,UICollectionViewDataSource, U
     
 }
 
+extension UIViewController {
+    
+    func hideKeyboardWhenTappedAround() {
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
+        
+        
+        
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+    
+    
+    
+    @objc func dismissKeyboard(){
+        view.endEditing(true)
+    }
+}

@@ -30,7 +30,7 @@ class DescViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        hideKeyboardWhenTappedAround()
         let idRef = rootRef.child("inventory").child(getID!)
         idRef.observe(.value) { (data) in
             if let dictionary = data.value as? [String: Any]{
