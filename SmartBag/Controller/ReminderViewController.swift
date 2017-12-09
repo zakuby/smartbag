@@ -29,6 +29,12 @@ class ReminderViewController: UIViewController {
                 idRef.updateChildValues([element : 1])
             }
         }
+        if removeID.isEmpty == false {
+            for element in removeID{
+                idRef.child(element).removeValue()
+            }
+            removeID.removeAll()
+        }
         
     }
     let datePicker = UIDatePicker()
@@ -37,6 +43,7 @@ class ReminderViewController: UIViewController {
     var inventorysDictionary = [String: Inventory]()
     var collectionViews: UICollectionView!
     var addID = [String]()
+    var removeID = [String]()
     override func viewDidLoad() {
         super.viewDidLoad()
         hideKeyboardWhenTappedAround()
@@ -45,7 +52,10 @@ class ReminderViewController: UIViewController {
         createDatePicker()
         // Do any additional setup after loading the view.
     }
-
+    
+    @objc func textFieldDidChange(_ textField: UITextField) {
+        print(textField.text)
+    }
     override var preferredStatusBarStyle: UIStatusBarStyle{
         return .lightContent
     }
@@ -61,7 +71,7 @@ class ReminderViewController: UIViewController {
         layout.minimumInteritemSpacing = 12
         
         collectionViews = UICollectionView(frame: view.frame, collectionViewLayout: layout)
-        collectionViews.contentInset = UIEdgeInsets(top: 22, left: 0, bottom: 0, right: 0)
+        collectionViews.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         collectionViews.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         collectionViews.showsVerticalScrollIndicator = false
         collectionViews.register(inventoryReminderCollectionViewCell.self, forCellWithReuseIdentifier: "inventoryReminder")
@@ -85,17 +95,14 @@ class ReminderViewController: UIViewController {
             
             inventoryReference.observe(.value, with: { (snapshot) in
                 let idTag = snapshot.key
-                print(idTag)
                 if let lJsonArray = snapshot.value{
                     let data = Mapper<Inventory>().map(JSONObject: lJsonArray)
-                    print(lJsonArray)
-                    if let index:Int = self.inventorys.index(where: {$0.ID == idTag || $0.status == 0}) {
+                    if let index:Int = self.inventorys.index(where: {$0.ID == idTag}) {
                         self.inventorys.remove(at: index)
+                        
                     }
-                    if data?.status != 0{
-                        self.inventorys.append(InventoryList(desc: data?.deskripsi ?? "Deskripsi Barang",imgUrl: data?.imageUrl ?? "",name: data?.name ?? "" ,inventID: idTag, stat: (data?.status)!, toDay: data?.timeOutDay! ?? 0, toMonth: data?.timeOutMonth! ?? 0, toYear: data?.timeOutYear! ?? 0, toHour: data?.timeOutHour! ?? 0, toMinute: data?.timeOutMinute! ?? 0, toSecond: data?.timeOutSecond! ?? 0, tiDay: data?.timeInDay!, tiMonth: data?.timeInMonth!, tiYear: data?.timeInYear!, tiHour: data?.timeInHour!, tiMinute: data?.timeInMinute, tiSecond: data?.timeInSecond!))
-                    }
-                    print(data?.timeInSecond)
+                    self.inventorys.append(InventoryList(added: false, desc: data?.deskripsi ?? "Deskripsi Barang",imgUrl: data?.imageUrl ?? "",name: data?.name ?? "Nama Barang" ,inventID: idTag, stat: (data?.status)!, toDay: data?.timeOutDay! ?? 0, toMonth: data?.timeOutMonth! ?? 0, toYear: data?.timeOutYear! ?? 0, toHour: data?.timeOutHour! ?? 0, toMinute: data?.timeOutMinute! ?? 0, toSecond: data?.timeOutSecond! ?? 0, tiDay: data?.timeInDay!, tiMonth: data?.timeInMonth!, tiYear: data?.timeInYear!, tiHour: data?.timeInHour!, tiMinute: data?.timeInMinute, tiSecond: data?.timeInSecond!))
+                    
                     DispatchQueue.main.async(execute: {
                         self.collectionViews.reloadData()
                     })
@@ -108,6 +115,7 @@ class ReminderViewController: UIViewController {
         self.view.endEditing(true)
         return false
     }
+    
     
     func createDatePicker(){
         let toolbar = UIToolbar()
@@ -137,7 +145,44 @@ class ReminderViewController: UIViewController {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd-MM-yyyy"
         dateTxtField.text = dateFormatter.string(from: datePicker.date)
+        observerUserDate(date: dateTxtField.text!)
         self.view.endEditing(true)
+    }
+    
+    func observerUserDate(date: String){
+        let dateRef = Database.database().reference().child("reminders")
+        dateRef.observe(.value) { (snapshot) in
+            if snapshot.hasChild(date){
+                print("there is reminder")
+                dateRef.child(date).observe(.childAdded, with: { (snapshot) in
+                    let inventoryID = snapshot.key
+                    print(snapshot.value)
+                    let inventoryReference = Database.database().reference().child("inventory").child(inventoryID)
+                    
+                    inventoryReference.observe(.value, with: { (snapshot) in
+                        let idTag = snapshot.key
+                        if let lJsonArray = snapshot.value{
+                            let data = Mapper<Inventory>().map(JSONObject: lJsonArray)
+                            print(lJsonArray)
+                            if let index:Int = self.inventorys.index(where: {$0.ID == idTag}) {
+                                self.inventorys[index].isAdded = true
+                            }
+                            DispatchQueue.main.async(execute: {
+                                self.collectionViews.reloadData()
+                            })
+                        }
+                    })
+                })
+            }else{
+                for element in self.inventorys{
+                    element.isAdded = false
+                }
+                DispatchQueue.main.async(execute: {
+                    self.collectionViews.reloadData()
+                })
+            }
+        }
+        
     }
 
     /*
@@ -176,7 +221,15 @@ extension ReminderViewController: UICollectionViewDelegate,UICollectionViewDataS
         let inventoryrData = inventorys[indexPath.row]
         let inventoryCell = cell as! inventoryReminderCollectionViewCell
         let url = URL(string: inventoryrData.imageUrl!)
-        
+        if inventoryrData.isAdded!{
+            inventoryCell.button.backgroundColor = UIColor.red
+            inventoryCell.button.setTitle("Remove", for: .normal)
+            inventoryCell.buttonChanged = true
+        }else if !inventoryrData.isAdded!{
+            inventoryCell.button.backgroundColor = UIColor.green
+            inventoryCell.button.setTitle("Add", for: .normal)
+            inventoryCell.buttonChanged = false
+        }
         inventoryCell.ID = inventoryrData.ID
         inventoryCell.imageView.kf.setImage(with: url)
         inventoryCell.titleLabel.text = inventoryrData.nama!
@@ -205,17 +258,25 @@ extension ReminderViewController: inventoryReminderCollectionViewCellDelegate {
         if let index:Int = self.addID.index(where: {$0 == ID}) {
             self.addID.remove(at: index)
         }
+        if let index:Int = self.removeID.index(where: {$0 == ID}) {
+            self.removeID.remove(at: index)
+        }
         if !forCell.buttonChanged{
             forCell.button.backgroundColor = UIColor.red
             forCell.button.setTitle("Remove", for: .normal)
             forCell.buttonChanged = !forCell.buttonChanged
             self.addID.append(ID!)
-            
+            if let index:Int = self.inventorys.index(where: {$0.ID == ID}) {
+                self.inventorys[index].isAdded = true
+            }
         }else{
             forCell.button.backgroundColor = UIColor.green
             forCell.button.setTitle("Add", for: .normal)
             forCell.buttonChanged = !forCell.buttonChanged
-            
+            self.removeID.append(ID!)
+            if let index:Int = self.inventorys.index(where: {$0.ID == ID}) {
+                self.inventorys[index].isAdded = false
+            }
         }
     }
 }

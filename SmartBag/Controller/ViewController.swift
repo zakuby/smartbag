@@ -73,7 +73,7 @@ class ViewController: UIViewController {
                         self.inventorys.remove(at: index)
                     }
                     if data?.status != 0{
-                        self.inventorys.append(InventoryList(desc: data?.deskripsi ?? "Deskripsi Barang",imgUrl: data?.imageUrl ?? "",name: data?.name ?? "" ,inventID: idTag, stat: (data?.status)!, toDay: data?.timeOutDay!, toMonth: data?.timeOutMonth!, toYear: data?.timeOutYear!, toHour: data?.timeOutHour!, toMinute: data?.timeOutMinute!, toSecond: data?.timeOutSecond!, tiDay: data?.timeInDay!, tiMonth: data?.timeInMonth!, tiYear: data?.timeInYear!, tiHour: data?.timeInHour!, tiMinute: data?.timeInMinute, tiSecond: data?.timeInSecond!))
+                        self.inventorys.append(InventoryList(added: false, desc: data?.deskripsi ?? "Deskripsi Barang",imgUrl: data?.imageUrl ?? "",name: data?.name ?? "" ,inventID: idTag, stat: (data?.status)!, toDay: data?.timeOutDay!, toMonth: data?.timeOutMonth!, toYear: data?.timeOutYear!, toHour: data?.timeOutHour!, toMinute: data?.timeOutMinute!, toSecond: data?.timeOutSecond!, tiDay: data?.timeInDay!, tiMonth: data?.timeInMonth!, tiYear: data?.timeInYear!, tiHour: data?.timeInHour!, tiMinute: data?.timeInMinute, tiSecond: data?.timeInSecond!))
                     }
                     print(data?.timeInSecond)
                     DispatchQueue.main.async(execute: {

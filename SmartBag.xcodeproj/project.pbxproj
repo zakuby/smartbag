@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		213A55FD70D704305C695DD1 /* Pods_SmartBag.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 609DCD4C6FE494D443923F74 /* Pods_SmartBag.framework */; };
 		840CCD8A1FC292F200EC526A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 840CCD891FC292F200EC526A /* GoogleService-Info.plist */; };
+		8421120E1FDC7A9E0071E619 /* RemiderListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8421120D1FDC7A9E0071E619 /* RemiderListViewController.swift */; };
 		84CC3FA81FD37CC000699F52 /* DescViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CC3FA71FD37CC000699F52 /* DescViewController.swift */; };
 		84ED2EB61FDA1DDB00543E4B /* ReminderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84ED2EB51FDA1DDB00543E4B /* ReminderViewController.swift */; };
 		84ED2EB81FDA232A00543E4B /* inventoryReminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84ED2EB71FDA232A00543E4B /* inventoryReminder.swift */; };
@@ -24,6 +25,7 @@
 /* Begin PBXFileReference section */
 		609DCD4C6FE494D443923F74 /* Pods_SmartBag.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SmartBag.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		840CCD891FC292F200EC526A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		8421120D1FDC7A9E0071E619 /* RemiderListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemiderListViewController.swift; sourceTree = "<group>"; };
 		84CC3FA71FD37CC000699F52 /* DescViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescViewController.swift; sourceTree = "<group>"; };
 		84ED2EB51FDA1DDB00543E4B /* ReminderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderViewController.swift; sourceTree = "<group>"; };
 		84ED2EB71FDA232A00543E4B /* inventoryReminder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = inventoryReminder.swift; sourceTree = "<group>"; };
@@ -117,6 +119,7 @@
 				84F6B3EC1FC2170900991C4D /* ViewController.swift */,
 				84CC3FA71FD37CC000699F52 /* DescViewController.swift */,
 				84ED2EB51FDA1DDB00543E4B /* ReminderViewController.swift */,
+				8421120D1FDC7A9E0071E619 /* RemiderListViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -264,6 +267,7 @@
 				84F6B4031FC21D5200991C4D /* InventoryList.swift in Sources */,
 				84ED2EB61FDA1DDB00543E4B /* ReminderViewController.swift in Sources */,
 				84F6B4001FC21AEF00991C4D /* Inventory.swift in Sources */,
+				8421120E1FDC7A9E0071E619 /* RemiderListViewController.swift in Sources */,
 				84F6B3ED1FC2170900991C4D /* ViewController.swift in Sources */,
 				84F6B3EB1FC2170900991C4D /* AppDelegate.swift in Sources */,
 			);

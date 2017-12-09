@@ -89,8 +89,8 @@ class inventoryReminderCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(titleLabel)
         
         button = UIButton(frame: CGRect(x: (contentView.frame.width - 110), y: (contentView.frame.height - 25), width: 100, height: 20))
-        button.backgroundColor = UIColor.green
-        button.setTitle("Add", for: .normal)
+//        button.backgroundColor = UIColor.green
+//        button.setTitle("Add", for: .normal)
         button.layer.cornerRadius = 3
         button.clipsToBounds = true
         button.addTarget(self, action: #selector(changeColor), for: .touchUpInside)

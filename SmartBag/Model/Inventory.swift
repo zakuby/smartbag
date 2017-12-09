@@ -19,8 +19,10 @@ class InventoryList: NSObject{
     var timeOutTime:String? = nil
     var timeInDate:String? = nil
     var timeInTime:String? = nil
+    var isAdded:Bool? = nil
     
-    init(desc: String, imgUrl: String?, name: String?, inventID: String?, stat: Int,toDay: Int?, toMonth: Int?, toYear: Int?, toHour: Int?, toMinute: Int?, toSecond: Int?,tiDay: Int?, tiMonth: Int?, tiYear: Int?, tiHour: Int?, tiMinute: Int?, tiSecond: Int?) {
+    init(added:Bool, desc: String, imgUrl: String?, name: String?, inventID: String?, stat: Int,toDay: Int?, toMonth: Int?, toYear: Int?, toHour: Int?, toMinute: Int?, toSecond: Int?,tiDay: Int?, tiMonth: Int?, tiYear: Int?, tiHour: Int?, tiMinute: Int?, tiSecond: Int?) {
+        isAdded = added
         imageUrl = imgUrl
         deskripsi = desc
         nama = name
