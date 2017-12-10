@@ -17,6 +17,7 @@ class ViewController: UIViewController {
     var inventorysDictionary = [String: Inventory]()
     var collectionViews: UICollectionView!
     
+    @IBOutlet weak var emptyBag: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,6 +58,50 @@ class ViewController: UIViewController {
         return .lightContent
     }
     
+    func observeTodayReminder(){
+        let currentDate = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd-MM-yyyy"
+        let date = dateFormatter.string(from: currentDate)
+        let dateRef = Database.database().reference().child("reminders")
+        dateRef.observe(.value) { (snapshot) in
+            if snapshot.hasChild(date){
+                print("there is reminder")
+                
+                dateRef.child(date).observe(.childAdded, with: { (snapshot) in
+                    let inventoryID = snapshot.key
+                    let inventoryReference = Database.database().reference().child("inventory").child(inventoryID)
+                    
+                    inventoryReference.observe(.value, with: { (snapshot) in
+                        let idTag = snapshot.key
+                        if let lJsonArray = snapshot.value{
+                            let data = Mapper<Inventory>().map(JSONObject: lJsonArray)
+                            if let index:Int = self.inventorys.index(where: {$0.ID == idTag}) {
+                                if self.inventorys[index].status == 0{
+                                    print("You are missing: " + self.inventorys[index].nama!)
+                                }else{
+                                    print("Found: " + self.inventorys[index].nama!)
+                                }
+                            }else{
+                                self.inventorys.append(InventoryList(added: false, desc: data?.deskripsi ?? "Deskripsi Barang",imgUrl: data?.imageUrl ?? "https://firebasestorage.googleapis.com/v0/b/smartbag-b64b8.appspot.com/o/noimage.png?alt=media&token=91a48b54-6e2e-43d1-8274-c66d2c679ee1",name: data?.name ?? "Nama Barang" ,inventID: idTag, stat: (data?.status)!, toDay: data?.timeOutDay!, toMonth: data?.timeOutMonth!, toYear: data?.timeOutYear!, toHour: data?.timeOutHour!, toMinute: data?.timeOutMinute!, toSecond: data?.timeOutSecond!, tiDay: data?.timeInDay!, tiMonth: data?.timeInMonth!, tiYear: data?.timeInYear!, tiHour: data?.timeInHour!, tiMinute: data?.timeInMinute, tiSecond: data?.timeInSecond!))                            }
+                        }
+                        DispatchQueue.main.async(execute: {
+                            self.collectionViews.reloadData()
+                        })
+                    })
+                })
+            }else{
+                print("there is no reminder today")
+//                for element in self.inventorys{
+//                    element.isAdded = false
+//                }
+//                DispatchQueue.main.async(execute: {
+//                    self.collectionViews.reloadData()
+//                })
+            }
+        }
+    }
+    
     func observerUserInventory(){
         let ref = Database.database().reference().child("inventory")
         ref.observe(.childAdded, with: { (snapshot) in
@@ -66,22 +111,31 @@ class ViewController: UIViewController {
             inventoryReference.observe(.value, with: { (snapshot) in
                 let idTag = snapshot.key
                 print(idTag)
+                
                 if let lJsonArray = snapshot.value{
+                    self.emptyBag.isHidden = true
                     let data = Mapper<Inventory>().map(JSONObject: lJsonArray)
-                    print(lJsonArray)
+//                    print(lJsonArray)
                     if let index:Int = self.inventorys.index(where: {$0.ID == idTag || $0.status == 0}) {
                         self.inventorys.remove(at: index)
                     }
                     if data?.status != 0{
-                        self.inventorys.append(InventoryList(added: false, desc: data?.deskripsi ?? "Deskripsi Barang",imgUrl: data?.imageUrl ?? "",name: data?.name ?? "" ,inventID: idTag, stat: (data?.status)!, toDay: data?.timeOutDay!, toMonth: data?.timeOutMonth!, toYear: data?.timeOutYear!, toHour: data?.timeOutHour!, toMinute: data?.timeOutMinute!, toSecond: data?.timeOutSecond!, tiDay: data?.timeInDay!, tiMonth: data?.timeInMonth!, tiYear: data?.timeInYear!, tiHour: data?.timeInHour!, tiMinute: data?.timeInMinute, tiSecond: data?.timeInSecond!))
+                        self.inventorys.append(InventoryList(added: true, desc: data?.deskripsi ?? "Deskripsi Barang",imgUrl: data?.imageUrl ?? "https://firebasestorage.googleapis.com/v0/b/smartbag-b64b8.appspot.com/o/noimage.png?alt=media&token=91a48b54-6e2e-43d1-8274-c66d2c679ee1",name: data?.name ?? "Nama Barang" ,inventID: idTag, stat: (data?.status)!, toDay: data?.timeOutDay!, toMonth: data?.timeOutMonth!, toYear: data?.timeOutYear!, toHour: data?.timeOutHour!, toMinute: data?.timeOutMinute!, toSecond: data?.timeOutSecond!, tiDay: data?.timeInDay!, tiMonth: data?.timeInMonth!, tiYear: data?.timeInYear!, tiHour: data?.timeInHour!, tiMinute: data?.timeInMinute, tiSecond: data?.timeInSecond!))
                     }
-                    print(data?.timeInSecond)
+                    if self.inventorys.isEmpty{
+                        self.emptyBag.isHidden = false
+                    }else{
+                        self.emptyBag.isHidden = true
+
+                    }
                     DispatchQueue.main.async(execute: {
                         self.collectionViews.reloadData()
                     })
                 }
             })
         })
+        observeTodayReminder()
+
     }
 }
 
@@ -110,7 +164,28 @@ extension ViewController: UICollectionViewDelegate,UICollectionViewDataSource, U
         let inventoryrData = inventorys[indexPath.row]
         let inventoryCell = cell as! inventoryListCollectionViewCell
         let url = URL(string: inventoryrData.imageUrl!)
-        
+        if inventoryrData.isAdded!{
+            inventoryCell.layer.shadowColor = UIColor(red: 226/255, green: 230/255, blue: 239/255, alpha: 1).cgColor
+            inventoryCell.layer.shadowOffset = CGSize(width: 0, height: 1)
+            inventoryCell.layer.shadowOpacity = 1
+            inventoryCell.layer.shadowRadius = 4 //Here your control your blur
+            inventoryCell.layer.masksToBounds = false
+            inventoryCell.layer.cornerRadius = 5
+            inventoryCell.backgroundColor = UIColor.white
+            inventoryCell.missingView.isHidden = true
+            inventoryCell.exclamationView.isHidden = true
+            inventoryCell.exclamationLabel.isHidden = true
+        }else{
+            inventoryCell.layer.shadowColor = UIColor(red: 255/255, green: 0/255, blue: 0/255, alpha: 1).cgColor
+            inventoryCell.layer.shadowOffset = CGSize(width: 0, height: 4)
+            inventoryCell.layer.shadowOpacity = 1
+            inventoryCell.layer.shadowRadius = 3 //Here your control your blur
+            inventoryCell.layer.masksToBounds = false
+            inventoryCell.layer.cornerRadius = 5
+            inventoryCell.missingView.isHidden = false
+            inventoryCell.exclamationView.isHidden = false
+            inventoryCell.exclamationLabel.isHidden = false
+        }
         inventoryCell.imageView.kf.setImage(with: url)
         inventoryCell.titleLabel.text = inventoryrData.nama!
         inventoryCell.descLabel.text = inventoryrData.deskripsi

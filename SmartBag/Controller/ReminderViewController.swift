@@ -24,7 +24,6 @@ class ReminderViewController: UIViewController {
         }
         let idRef = rootRef.child("reminders").child(dateTxtField.text!)
         if addID.isEmpty == false {
-            idRef.removeValue()
             for element in addID{
                 idRef.updateChildValues([element : 1])
             }
@@ -33,7 +32,6 @@ class ReminderViewController: UIViewController {
             for element in removeID{
                 idRef.child(element).removeValue()
             }
-            removeID.removeAll()
         }
         
     }
@@ -99,7 +97,6 @@ class ReminderViewController: UIViewController {
                     let data = Mapper<Inventory>().map(JSONObject: lJsonArray)
                     if let index:Int = self.inventorys.index(where: {$0.ID == idTag}) {
                         self.inventorys.remove(at: index)
-                        
                     }
                     self.inventorys.append(InventoryList(added: false, desc: data?.deskripsi ?? "Deskripsi Barang",imgUrl: data?.imageUrl ?? "",name: data?.name ?? "Nama Barang" ,inventID: idTag, stat: (data?.status)!, toDay: data?.timeOutDay! ?? 0, toMonth: data?.timeOutMonth! ?? 0, toYear: data?.timeOutYear! ?? 0, toHour: data?.timeOutHour! ?? 0, toMinute: data?.timeOutMinute! ?? 0, toSecond: data?.timeOutSecond! ?? 0, tiDay: data?.timeInDay!, tiMonth: data?.timeInMonth!, tiYear: data?.timeInYear!, tiHour: data?.timeInHour!, tiMinute: data?.timeInMinute, tiSecond: data?.timeInSecond!))
                     

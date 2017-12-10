@@ -25,11 +25,6 @@ class inventoryListCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    let minimumSpend: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
     
     let descLabel: UILabel = {
         let label = UILabel()
@@ -43,12 +38,12 @@ class inventoryListCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    
-    let descriptionLabel: UILabel = {
+    let exclamationLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
+    
     
     let imageView: UIImageView = {
         let image = UIImageView()
@@ -62,7 +57,19 @@ class inventoryListCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
+    let exclamationView: UIImageView = {
+        let image = UIImageView()
+        image.translatesAutoresizingMaskIntoConstraints = false
+        return image
+    }()
+    
     let descView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    let missingView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -79,11 +86,23 @@ class inventoryListCollectionViewCell: UICollectionViewCell {
         contentView.layer.cornerRadius = 5
         contentView.backgroundColor = UIColor.white
         
+        contentView.addSubview(missingView)
         contentView.addSubview(imageView)
         contentView.addSubview(expiryDate)
-        contentView.addSubview(minimumSpend)
         contentView.addSubview(descLabel)
         contentView.addSubview(titleLabel)
+        contentView.addSubview(exclamationLabel)
+        contentView.addSubview(exclamationView)
+        
+        
+        missingView.clipsToBounds = true
+        missingView.isHidden = true
+        missingView.translatesAutoresizingMaskIntoConstraints = false
+        missingView.heightAnchor.constraint(equalTo: contentView.heightAnchor).isActive = true
+        missingView.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
+        missingView.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
+        missingView.leftAnchor.constraint(equalTo: contentView.leftAnchor).isActive = true
+        missingView.backgroundColor = UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 0.6)
         
         imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -93,6 +112,16 @@ class inventoryListCollectionViewCell: UICollectionViewCell {
         imageView.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
         imageView.leftAnchor.constraint(equalTo: contentView.leftAnchor).isActive = true
         
+        exclamationView.clipsToBounds = true
+        exclamationView.isHidden = true
+        exclamationView.image = UIImage(named: "exclamation")
+        exclamationView.translatesAutoresizingMaskIntoConstraints = false
+        exclamationView.contentMode = .scaleToFill
+        exclamationView.heightAnchor.constraint(equalToConstant: 75).isActive = true
+        exclamationView.widthAnchor.constraint(equalToConstant: 75).isActive = true
+        exclamationView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
+        exclamationView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
+        
         titleLabel.textColor = UIColor(red: 64/255, green: 196/255, blue: 142/255, alpha: 1)
         titleLabel.text = "Worth"
         titleLabel.font = UIFont.init(name: "GothamBook", size: 12)
@@ -101,10 +130,17 @@ class inventoryListCollectionViewCell: UICollectionViewCell {
         titleLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -10).isActive = true
         titleLabel.numberOfLines = 2
         
+        exclamationLabel.isHidden = true
+        exclamationLabel.textColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
+        exclamationLabel.text = "MISSING !"
+        exclamationLabel.font = UIFont.init(name: "GothamBook", size: 32)
+        exclamationLabel.topAnchor.constraint(equalTo: exclamationView.bottomAnchor, constant: 10).isActive = true
+        exclamationLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
+        exclamationLabel.numberOfLines = 1
+        
         descLabel.textColor = UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 1)
         descLabel.font = UIFont.init(name: "GothamMedium", size: 12)
         descLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor).isActive = true
-        descLabel.bottomAnchor.constraint(equalTo: expiryDate.topAnchor, constant: -10).isActive = true
         descLabel.leftAnchor.constraint(equalTo: imageView.rightAnchor, constant: 16).isActive = true
         descLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -5).isActive = true
         //        descLabel.adjustsFontSizeToFitWidth = true

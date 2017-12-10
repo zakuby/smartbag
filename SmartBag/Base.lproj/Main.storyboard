@@ -50,7 +50,40 @@
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VLK-El-W2C">
                                 <rect key="frame" x="0.0" y="90" width="375" height="577"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JnZ-lE-RmF">
+                                        <rect key="frame" x="0.0" y="238.5" width="375" height="100"/>
+                                        <subviews>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="white-empty-box-512" translatesAutoresizingMaskIntoConstraints="NO" id="26Y-PW-vcH">
+                                                <rect key="frame" x="162.5" y="0.0" width="50" height="50"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="50" id="Ck6-gq-TU8"/>
+                                                    <constraint firstAttribute="width" constant="50" id="sQQ-Hx-h2p"/>
+                                                </constraints>
+                                            </imageView>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Your bag is empty at the moment" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YVv-oE-imc">
+                                                <rect key="frame" x="60" y="50" width="254" height="21"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstItem="YVv-oE-imc" firstAttribute="top" secondItem="26Y-PW-vcH" secondAttribute="bottom" id="hRw-5O-byd"/>
+                                            <constraint firstItem="26Y-PW-vcH" firstAttribute="top" secondItem="JnZ-lE-RmF" secondAttribute="top" id="orv-hb-Hl6"/>
+                                            <constraint firstAttribute="height" constant="100" id="wyn-DF-eW6"/>
+                                            <constraint firstItem="26Y-PW-vcH" firstAttribute="centerX" secondItem="JnZ-lE-RmF" secondAttribute="centerX" id="ymd-ta-mhv"/>
+                                            <constraint firstItem="YVv-oE-imc" firstAttribute="centerX" secondItem="JnZ-lE-RmF" secondAttribute="centerX" id="zjk-4Q-3fx"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
                                 <color key="backgroundColor" red="0.20671418753023532" green="0.86631503807106602" blue="0.68563851470864778" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstItem="JnZ-lE-RmF" firstAttribute="leading" secondItem="VLK-El-W2C" secondAttribute="leading" id="4CV-lx-oQ6"/>
+                                    <constraint firstItem="JnZ-lE-RmF" firstAttribute="centerX" secondItem="VLK-El-W2C" secondAttribute="centerX" id="Ead-GK-3IN"/>
+                                    <constraint firstAttribute="trailing" secondItem="JnZ-lE-RmF" secondAttribute="trailing" id="la2-SX-gvP"/>
+                                    <constraint firstItem="JnZ-lE-RmF" firstAttribute="centerY" secondItem="VLK-El-W2C" secondAttribute="centerY" id="qZg-BZ-27n"/>
+                                </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="0.25252365360000001" green="0.76970413339999999" blue="0.55659872450000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -66,6 +99,7 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
+                        <outlet property="emptyBag" destination="JnZ-lE-RmF" id="Jjv-uG-55N"/>
                         <outlet property="headerView" destination="J8h-Gx-WAb" id="QTl-14-8nF"/>
                     </connections>
                 </viewController>
@@ -351,8 +385,9 @@
     </scenes>
     <resources>
         <image name="menu-icon-11" width="512" height="512"/>
+        <image name="white-empty-box-512" width="512" height="512"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="txM-hh-XaV"/>
+        <segue reference="Osa-CU-lqo"/>
     </inferredMetricsTieBreakers>
 </document>
