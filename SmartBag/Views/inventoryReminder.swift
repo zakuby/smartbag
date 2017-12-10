@@ -116,7 +116,6 @@ class inventoryReminderCollectionViewCell: UICollectionViewCell {
         descLabel.textColor = UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 1)
         descLabel.font = UIFont.init(name: "GothamMedium", size: 12)
         descLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor).isActive = true
-        descLabel.bottomAnchor.constraint(equalTo: button.topAnchor, constant: -10).isActive = true
         descLabel.leftAnchor.constraint(equalTo: imageView.rightAnchor, constant: 16).isActive = true
         descLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -5).isActive = true
         //        descLabel.adjustsFontSizeToFitWidth = true

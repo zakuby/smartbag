@@ -18,10 +18,15 @@ class DescViewController: UIViewController {
     var getID: String?
     let rootRef = Database.database().reference()
     
+    @IBAction func backButton(_ sender: Any) {
+        dismiss(animated: true, completion: nil)
+    }
+    
     @IBAction func saveButton(_ sender: Any) {
         let idRef = rootRef.child("inventory").child(getID!)
         idRef.updateChildValues(["deskripsi" : self.descText.text ?? "Deskripsi Barang"])
         idRef.updateChildValues(["nama" : self.descTitle.text?.uppercased() ?? "NAMA BARANG"])
+        createAlert(titleText: "Succes", messageText: "Update Succesful")
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle{

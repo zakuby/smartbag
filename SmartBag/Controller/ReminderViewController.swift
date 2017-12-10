@@ -13,13 +13,19 @@ import ObjectMapper
 
 class ReminderViewController: UIViewController {
 
+    @IBOutlet weak var reminderTitle: UILabel!
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var dateTxtField: UITextField!
     let rootRef = Database.database().reference()
     
+    @IBAction func backButton(_ sender: Any) {
+        dismiss(animated: true, completion: nil)
+    }
+    
     @IBAction func addTask(_ sender: Any) {
         
         if dateTxtField.text == ""{
+            createAlert(titleText: "Error", messageText: "Reminder Date is Empty !")
             return
         }
         let idRef = rootRef.child("reminders").child(dateTxtField.text!)
@@ -33,6 +39,12 @@ class ReminderViewController: UIViewController {
                 idRef.child(element).removeValue()
             }
         }
+        if getDate != nil{
+            createAlert(titleText: "Succes", messageText: "Reminder Updated")
+        }else{
+            createAlert(titleText: "Succes", messageText: "Reminder Added")
+        }
+        
         
     }
     let datePicker = UIDatePicker()
@@ -42,10 +54,12 @@ class ReminderViewController: UIViewController {
     var collectionViews: UICollectionView!
     var addID = [String]()
     var removeID = [String]()
+    var getDate: String?
     override func viewDidLoad() {
         super.viewDidLoad()
         hideKeyboardWhenTappedAround()
         setupCollectionView()
+        editReminder()
         observerUserInventory()
         createDatePicker()
         // Do any additional setup after loading the view.
@@ -83,6 +97,16 @@ class ReminderViewController: UIViewController {
         collectionViews.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         collectionViews.topAnchor.constraint(equalTo: whatLabel.bottomAnchor, constant: 10).isActive = true
         
+    }
+    
+    func editReminder(){
+        if getDate != nil{
+            dateTxtField.text  = getDate
+            observerUserDate(date: getDate!)
+            reminderTitle.text = "UPDATE A REMINDER"
+            addButton.setTitle("EDIT REMINDER", for: .normal)
+            dateTxtField.isUserInteractionEnabled = false
+        }
     }
     
     func observerUserInventory(){

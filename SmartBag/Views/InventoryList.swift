@@ -156,12 +156,6 @@ class inventoryListCollectionViewCell: UICollectionViewCell {
         expiryDate.adjustsFontSizeToFitWidth = true
         expiryDate.sizeToFit()
         expiryDate.numberOfLines = 1
-        
-        
-        
-        
-        
-        
     }
     
 }
