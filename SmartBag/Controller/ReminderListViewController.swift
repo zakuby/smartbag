@@ -22,8 +22,11 @@ class ReminderListViewController: UIViewController {
     @IBOutlet weak var addButton: UIButton!
     override func viewDidLoad() {
         super.viewDidLoad()
-        observerUserReminder()
+//        observerUserReminder()
         setupCollectionView()
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        observerUserReminder()
     }
 
     func setupCollectionView(){
@@ -129,9 +132,14 @@ extension ReminderListViewController: UICollectionViewDelegate,UICollectionViewD
         let newDate = dateFormatter.string(from: reminderDate!)
         
         reminderCell.descLabel.text = ""
-        for element in reminderData.nama!{
-            reminderCell.descLabel.text = reminderCell.descLabel.text! + "• " + element.capitalized + "\n"
+        if reminderData.nama?.count == 1{
+            reminderCell.descLabel.text = "• " + (reminderData.nama?[0].capitalized)!
+        }else{
+            for element in reminderData.nama!{
+                reminderCell.descLabel.text = reminderCell.descLabel.text! + "• " + element.capitalized + "\n"
+            }
         }
+        
         reminderCell.date = reminderData.dates
         reminderCell.titleLabel.text = newDate
         

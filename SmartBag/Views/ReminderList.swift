@@ -84,6 +84,7 @@ class reminderListCollectionViewCell: UICollectionViewCell {
         titleLabel.text = "Worth"
         titleLabel.font = UIFont.init(name: "GothamBook", size: 12)
         titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
+        titleLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
         titleLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 10).isActive = true
         titleLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -10).isActive = true
         titleLabel.numberOfLines = 1
@@ -92,10 +93,12 @@ class reminderListCollectionViewCell: UICollectionViewCell {
         descLabel.textColor = UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 1)
         descLabel.font = UIFont.init(name: "GothamMedium", size: 12)
         descLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor).isActive = true
+        descLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
         descLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 10).isActive = true
-        descLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -5).isActive = true
-        //        descLabel.adjustsFontSizeToFitWidth = true
+        descLabel.rightAnchor.constraint(equalTo: editButton.leftAnchor, constant: -5).isActive = true
+        descLabel.adjustsFontSizeToFitWidth = true
         descLabel.sizeToFit()
+        descLabel.minimumScaleFactor = 0.5
         descLabel.numberOfLines = 0
         
     }

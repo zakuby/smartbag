@@ -16,7 +16,9 @@ class ViewController: UIViewController {
     var inventorys = [InventoryList]()
     var inventorysDictionary = [String: Inventory]()
     var collectionViews: UICollectionView!
+    var collectionViewsTopAnchor: NSLayoutConstraint?
     
+    @IBOutlet weak var alertNoReminder: UIView!
     @IBOutlet weak var emptyBag: UIView!
     
     override func viewDidLoad() {
@@ -25,6 +27,10 @@ class ViewController: UIViewController {
         setupCollectionView()
         observerUserInventory()
         // Do any additional setup after loading the view, typically from a nib.
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        observerUserInventory()
     }
     
     func setupCollectionView(){
@@ -45,7 +51,8 @@ class ViewController: UIViewController {
         collectionViews.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         collectionViews.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
         collectionViews.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        collectionViews.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 10).isActive = true
+        collectionViewsTopAnchor = collectionViews.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 10)
+        collectionViewsTopAnchor?.isActive = true
         
     }
 
@@ -66,8 +73,10 @@ class ViewController: UIViewController {
         let dateRef = Database.database().reference().child("reminders")
         dateRef.observe(.value) { (snapshot) in
             if snapshot.hasChild(date){
-                print("there is reminder")
-                
+                self.alertNoReminder.isHidden = true
+                self.collectionViewsTopAnchor?.isActive = false
+                self.collectionViewsTopAnchor = self.collectionViews.topAnchor.constraint(equalTo: self.headerView.bottomAnchor)
+                self.collectionViewsTopAnchor?.isActive = true
                 dateRef.child(date).observe(.childAdded, with: { (snapshot) in
                     let inventoryID = snapshot.key
                     let inventoryReference = Database.database().reference().child("inventory").child(inventoryID)
@@ -91,13 +100,10 @@ class ViewController: UIViewController {
                     })
                 })
             }else{
-                print("there is no reminder today")
-//                for element in self.inventorys{
-//                    element.isAdded = false
-//                }
-//                DispatchQueue.main.async(execute: {
-//                    self.collectionViews.reloadData()
-//                })
+                self.alertNoReminder.isHidden = false
+                self.collectionViewsTopAnchor?.isActive = false
+                self.collectionViewsTopAnchor = self.collectionViews.topAnchor.constraint(equalTo: self.alertNoReminder.bottomAnchor)
+                self.collectionViewsTopAnchor?.isActive = true
             }
         }
     }

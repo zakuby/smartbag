@@ -76,12 +76,40 @@
                                             <constraint firstItem="YVv-oE-imc" firstAttribute="centerX" secondItem="JnZ-lE-RmF" secondAttribute="centerX" id="zjk-4Q-3fx"/>
                                         </constraints>
                                     </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="G0T-Yc-h1P">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="35"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You dont have reminder for Today" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qnd-s7-LBo">
+                                                <rect key="frame" x="50" y="5" width="274.5" height="21"/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="warning" translatesAutoresizingMaskIntoConstraints="NO" id="Xwj-XO-a19">
+                                                <rect key="frame" x="20" y="3" width="25" height="25"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="25" id="9Vu-rx-62a"/>
+                                                    <constraint firstAttribute="width" constant="25" id="QgM-SY-HFh"/>
+                                                </constraints>
+                                            </imageView>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="35" id="CdE-ET-KR3"/>
+                                            <constraint firstItem="qnd-s7-LBo" firstAttribute="leading" secondItem="Xwj-XO-a19" secondAttribute="trailing" constant="5" id="KC1-Ir-giE"/>
+                                            <constraint firstItem="qnd-s7-LBo" firstAttribute="centerX" secondItem="G0T-Yc-h1P" secondAttribute="centerX" id="i5i-9g-8Jo"/>
+                                            <constraint firstItem="Xwj-XO-a19" firstAttribute="centerY" secondItem="qnd-s7-LBo" secondAttribute="centerY" id="uva-ZY-0nz"/>
+                                            <constraint firstItem="qnd-s7-LBo" firstAttribute="top" secondItem="G0T-Yc-h1P" secondAttribute="top" constant="5" id="xnE-xy-fxf"/>
+                                        </constraints>
+                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" red="0.20671418753023532" green="0.86631503807106602" blue="0.68563851470864778" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstItem="JnZ-lE-RmF" firstAttribute="leading" secondItem="VLK-El-W2C" secondAttribute="leading" id="4CV-lx-oQ6"/>
+                                    <constraint firstItem="G0T-Yc-h1P" firstAttribute="leading" secondItem="VLK-El-W2C" secondAttribute="leading" id="83j-5Y-sTk"/>
+                                    <constraint firstAttribute="trailing" secondItem="G0T-Yc-h1P" secondAttribute="trailing" id="DSm-kX-lGb"/>
                                     <constraint firstItem="JnZ-lE-RmF" firstAttribute="centerX" secondItem="VLK-El-W2C" secondAttribute="centerX" id="Ead-GK-3IN"/>
                                     <constraint firstAttribute="trailing" secondItem="JnZ-lE-RmF" secondAttribute="trailing" id="la2-SX-gvP"/>
+                                    <constraint firstItem="G0T-Yc-h1P" firstAttribute="top" secondItem="VLK-El-W2C" secondAttribute="top" id="qTg-X8-Z8f"/>
                                     <constraint firstItem="JnZ-lE-RmF" firstAttribute="centerY" secondItem="VLK-El-W2C" secondAttribute="centerY" id="qZg-BZ-27n"/>
                                 </constraints>
                             </view>
@@ -99,6 +127,7 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
+                        <outlet property="alertNoReminder" destination="G0T-Yc-h1P" id="xsu-xp-bM2"/>
                         <outlet property="emptyBag" destination="JnZ-lE-RmF" id="Jjv-uG-55N"/>
                         <outlet property="headerView" destination="J8h-Gx-WAb" id="QTl-14-8nF"/>
                     </connections>
@@ -440,6 +469,7 @@
         <image name="left-arrow (2)" width="64" height="64"/>
         <image name="menu-icon-11" width="512" height="512"/>
         <image name="plus" width="128" height="128"/>
+        <image name="warning" width="128" height="128"/>
         <image name="white-empty-box-512" width="512" height="512"/>
     </resources>
 </document>
