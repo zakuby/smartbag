@@ -12,6 +12,9 @@ import Kingfisher
 
 class DescViewController: UIViewController {
 
+    @IBAction func changeImage(_ sender: Any) {
+    }
+    @IBOutlet weak var changeImageButton: UIButton!
     @IBOutlet weak var descTitle: UITextField!
     @IBOutlet weak var descText: UITextView!
     @IBOutlet weak var descImage: UIImageView!
@@ -47,6 +50,9 @@ class DescViewController: UIViewController {
                 if dictionary["imageUrl"] != nil{
                     let url = URL(string: (dictionary["imageUrl"]! as? String)!)
                     self.descImage.kf.setImage(with: url)
+                }else{
+                    let url = URL(string: "https://firebasestorage.googleapis.com/v0/b/smartbag-b64b8.appspot.com/o/noimage.png?alt=media&token=91a48b54-6e2e-43d1-8274-c66d2c679ee1")
+                     self.descImage.kf.setImage(with: url)
                 }
                 
                 if dictionary["deskripsi"] != nil{

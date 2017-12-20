@@ -92,7 +92,8 @@ class ViewController: UIViewController {
                                     print("Found: " + self.inventorys[index].nama!)
                                 }
                             }else{
-                                self.inventorys.append(InventoryList(added: false, desc: data?.deskripsi ?? "Deskripsi Barang",imgUrl: data?.imageUrl ?? "https://firebasestorage.googleapis.com/v0/b/smartbag-b64b8.appspot.com/o/noimage.png?alt=media&token=91a48b54-6e2e-43d1-8274-c66d2c679ee1",name: data?.name ?? "Nama Barang" ,inventID: idTag, stat: (data?.status)!, toDay: data?.timeOutDay!, toMonth: data?.timeOutMonth!, toYear: data?.timeOutYear!, toHour: data?.timeOutHour!, toMinute: data?.timeOutMinute!, toSecond: data?.timeOutSecond!, tiDay: data?.timeInDay!, tiMonth: data?.timeInMonth!, tiYear: data?.timeInYear!, tiHour: data?.timeInHour!, tiMinute: data?.timeInMinute, tiSecond: data?.timeInSecond!))                            }
+                                self.inventorys.append(InventoryList(added: false, desc: data?.deskripsi ?? "Deskripsi Barang",imgUrl: data?.imageUrl ?? "https://firebasestorage.googleapis.com/v0/b/smartbag-b64b8.appspot.com/o/noimage.png?alt=media&token=91a48b54-6e2e-43d1-8274-c66d2c679ee1",name: data?.name ?? "Nama Barang" ,inventID: idTag, stat: (data?.status)!, timeOut: data?.timeOut ?? "01-01-1980 00:00:00", timeIn: data?.timeIn ?? "01-01-1980 00:00:00" ))
+                            }
                         }
                         DispatchQueue.main.async(execute: {
                             self.collectionViews.reloadData()
@@ -116,17 +117,15 @@ class ViewController: UIViewController {
             
             inventoryReference.observe(.value, with: { (snapshot) in
                 let idTag = snapshot.key
-                print(idTag)
                 
                 if let lJsonArray = snapshot.value{
                     self.emptyBag.isHidden = true
                     let data = Mapper<Inventory>().map(JSONObject: lJsonArray)
-//                    print(lJsonArray)
-                    if let index:Int = self.inventorys.index(where: {$0.ID == idTag || $0.status == 0}) {
+                    if let index:Int = self.inventorys.index(where: {$0.ID == idTag || $0.status == 0 && $0.isAdded == true}) {
                         self.inventorys.remove(at: index)
                     }
                     if data?.status != 0{
-                        self.inventorys.append(InventoryList(added: true, desc: data?.deskripsi ?? "Deskripsi Barang",imgUrl: data?.imageUrl ?? "https://firebasestorage.googleapis.com/v0/b/smartbag-b64b8.appspot.com/o/noimage.png?alt=media&token=91a48b54-6e2e-43d1-8274-c66d2c679ee1",name: data?.name ?? "Nama Barang" ,inventID: idTag, stat: (data?.status)!, toDay: data?.timeOutDay!, toMonth: data?.timeOutMonth!, toYear: data?.timeOutYear!, toHour: data?.timeOutHour!, toMinute: data?.timeOutMinute!, toSecond: data?.timeOutSecond!, tiDay: data?.timeInDay!, tiMonth: data?.timeInMonth!, tiYear: data?.timeInYear!, tiHour: data?.timeInHour!, tiMinute: data?.timeInMinute, tiSecond: data?.timeInSecond!))
+                        self.inventorys.append(InventoryList(added: true, desc: data?.deskripsi ?? "Deskripsi Barang",imgUrl: data?.imageUrl ?? "https://firebasestorage.googleapis.com/v0/b/smartbag-b64b8.appspot.com/o/noimage.png?alt=media&token=91a48b54-6e2e-43d1-8274-c66d2c679ee1",name: data?.name ?? "Nama Barang" ,inventID: idTag, stat: (data?.status)!, timeOut: data?.timeOut ?? "01-01-1980 00:00:00", timeIn: data?.timeIn ?? "01-01-1980 00:00:00" ))
                     }
                     if self.inventorys.isEmpty{
                         self.emptyBag.isHidden = false
@@ -170,6 +169,11 @@ extension ViewController: UICollectionViewDelegate,UICollectionViewDataSource, U
         let inventoryrData = inventorys[indexPath.row]
         let inventoryCell = cell as! inventoryListCollectionViewCell
         let url = URL(string: inventoryrData.imageUrl!)
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd-MM-yyyy HH:mm:ss"
+        let dateIn = dateFormatter.date(from: inventoryrData.timeInDate!)
+        dateFormatter.dateFormat = "HH:mm:ss"
+        let newTimeIn = dateFormatter.string(from: dateIn!)
         if inventoryrData.isAdded!{
             inventoryCell.layer.shadowColor = UIColor(red: 226/255, green: 230/255, blue: 239/255, alpha: 1).cgColor
             inventoryCell.layer.shadowOffset = CGSize(width: 0, height: 1)
@@ -195,7 +199,7 @@ extension ViewController: UICollectionViewDelegate,UICollectionViewDataSource, U
         inventoryCell.imageView.kf.setImage(with: url)
         inventoryCell.titleLabel.text = inventoryrData.nama!
         inventoryCell.descLabel.text = inventoryrData.deskripsi
-        inventoryCell.expiryDate.text = "Time In: " + inventoryrData.timeInTime!
+        inventoryCell.expiryDate.text = "Time In: " + newTimeIn
     }
     //Set the size of cell
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

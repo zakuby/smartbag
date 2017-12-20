@@ -122,7 +122,7 @@ class ReminderViewController: UIViewController {
                     if let index:Int = self.inventorys.index(where: {$0.ID == idTag}) {
                         self.inventorys.remove(at: index)
                     }
-                    self.inventorys.append(InventoryList(added: false, desc: data?.deskripsi ?? "Deskripsi Barang",imgUrl: data?.imageUrl ?? "",name: data?.name ?? "Nama Barang" ,inventID: idTag, stat: (data?.status)!, toDay: data?.timeOutDay! ?? 0, toMonth: data?.timeOutMonth! ?? 0, toYear: data?.timeOutYear! ?? 0, toHour: data?.timeOutHour! ?? 0, toMinute: data?.timeOutMinute! ?? 0, toSecond: data?.timeOutSecond! ?? 0, tiDay: data?.timeInDay!, tiMonth: data?.timeInMonth!, tiYear: data?.timeInYear!, tiHour: data?.timeInHour!, tiMinute: data?.timeInMinute, tiSecond: data?.timeInSecond!))
+                    self.inventorys.append(InventoryList(added: false, desc: data?.deskripsi ?? "Deskripsi Barang",imgUrl: data?.imageUrl ?? "https://firebasestorage.googleapis.com/v0/b/smartbag-b64b8.appspot.com/o/noimage.png?alt=media&token=91a48b54-6e2e-43d1-8274-c66d2c679ee1",name: data?.name ?? "Nama Barang" ,inventID: idTag, stat: (data?.status)!, timeOut: data?.timeOut ?? "01-01-1980 00:00:00", timeIn: data?.timeIn ?? "01-01-1980 00:00:00" ))
                     
                     DispatchQueue.main.async(execute: {
                         self.collectionViews.reloadData()
