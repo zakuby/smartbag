@@ -131,32 +131,49 @@ void loop()
       digitalClockDisplay();
     }
   }
-  double Ax, Ay, Az, T, Gx, Gy, Gz;
+  
+  readAccel();
+  delay(500);
+  scanRFID();
+
+} 
+double AxPrev, AyPrev, AzPrev, AxNext, AyNext, AzNext, rangeAz;
+int counterAccel = 0;
+int counterIdle = 0;
+void readAccel(){
+  double Ax, Ay, Az;
   Read_RawValue(MPU6050SlaveAddress, MPU6050_REGISTER_ACCEL_XOUT_H);
 
   //divide each with their sensitivity scale factor
   Ax = (double)AccelX / AccelScaleFactor;
   Ay = (double)AccelY / AccelScaleFactor;
   Az = (double)AccelZ / AccelScaleFactor;
-  T = (double)Temperature / 340 + 36.53; //temperature formula
-  Gx = (double)GyroX / GyroScaleFactor;
-  Gy = (double)GyroY / GyroScaleFactor;
-  Gz = (double)GyroZ / GyroScaleFactor;
-  if (!notag)
-  {
-    Serial.print("Ax: "); Serial.print(Ax);
-    Serial.print(" Ay: "); Serial.print(Ay);
-    Serial.print(" Az: "); Serial.print(Az);
-    Serial.print(" T: "); Serial.print(T);
-    Serial.print(" Gx: "); Serial.print(Gx);
-    Serial.print(" Gy: "); Serial.print(Gy);
-    Serial.print(" Gz: "); Serial.println(Gz);
-    delay(100);
+  if (counterAccel == 0){
+    AxPrev = Ax;
+    AzPrev = Az;
+    AyPrev = Ay;
+    counterAccel = 1;
+  }else if(counterAccel == 1){
+    AxNext = Ax;
+    AzNext = Az;
+    AyPrev = Ay;
+    counterAccel = 0;
+    counterIdle = counterIdle + 1;
+    rangeAz = AzPrev - AzNext;
+    Serial.print("Az Range : ");Serial.println(AzPrev - AzNext);
+    if (rangeAz >= 0.12 || rangeAz <= -0.12){
+      Serial.print("Tas Diangkat");
+        if (Firebase.getInt("inventory/tasMove") == 0){
+          Firebase.set("inventory/tasMove", 1);
+          counterIdle = 0;
+        }
+    }else if (counterIdle == 10 && rangeAz <= 0.03 && rangeAz >= -0.03){
+        if (Firebase.getInt("inventory/tasMove") != 0){
+          Firebase.set("inventory/tasMove", 0);
+        }
+    }
   }
-  
-  scanRFID();
-
-} 
+}
 
 void scanRFID(){
   // Look for new cards
