@@ -8,6 +8,7 @@ target 'SmartBag' do
 
   # Pods for SmartBag
   pod 'Firebase'
+  pod 'FirebaseStorage'
   pod 'Firebase/Database'
   pod 'Firebase/Core'
   pod 'Alamofire'

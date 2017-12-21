@@ -20,9 +20,14 @@ PODS:
     - FirebaseCore (~> 4.0)
     - leveldb-library (~> 1.18)
   - FirebaseInstanceID (2.0.6)
+  - FirebaseStorage (2.0.2):
+    - FirebaseAnalytics (~> 4.0)
+    - FirebaseCore (~> 4.0)
+    - GTMSessionFetcher/Core (~> 1.1)
   - GoogleToolboxForMac/Defines (2.1.3)
   - GoogleToolboxForMac/NSData+zlib (2.1.3):
     - GoogleToolboxForMac/Defines (= 2.1.3)
+  - GTMSessionFetcher/Core (1.1.12)
   - Kingfisher (4.3.0)
   - leveldb-library (1.20)
   - nanopb (0.3.8):
@@ -38,6 +43,7 @@ DEPENDENCIES:
   - Firebase
   - Firebase/Core
   - Firebase/Database
+  - FirebaseStorage
   - Kingfisher (~> 4.0)
   - ObjectMapper
   - SwiftyJSON
@@ -49,13 +55,15 @@ SPEC CHECKSUMS:
   FirebaseCore: 2a946ece8fbe3ce1fdeeb55324f273caade22df9
   FirebaseDatabase: 2e6e8e110b93b9a6e7aac71774c769a363035cb1
   FirebaseInstanceID: 24958382a1011bba5aaff37e334e7a650b9118f5
+  FirebaseStorage: 0cca42d9b889a0227c3a50121f45a4469fc9eb27
   GoogleToolboxForMac: 2501e2ad72a52eb3dfe7bd9aee7dad11b858bd20
+  GTMSessionFetcher: ebaa1f79a5366922c1735f1566901f50beba23b7
   Kingfisher: 475df87bb7196e51a8e9a48b667a5388a4709241
   leveldb-library: 4f9eedf84ab46b4fa3b7893bf30714b2a1a74022
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
   ObjectMapper: 20505058f54e5c3ca69e1d6de9897d152a5369a6
   SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
 
-PODFILE CHECKSUM: 3bd148c3fa619c40ee01f7b8c2d46ce4ee8e5890
+PODFILE CHECKSUM: 2380971828f5d7eb4420cf33f21081f00597140b
 
-COCOAPODS: 1.2.1
+COCOAPODS: 1.3.1

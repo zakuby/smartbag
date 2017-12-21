@@ -86,22 +86,23 @@ class inventoryListCollectionViewCell: UICollectionViewCell {
         contentView.layer.cornerRadius = 5
         contentView.backgroundColor = UIColor.white
         
-        contentView.addSubview(missingView)
+        
         contentView.addSubview(imageView)
         contentView.addSubview(expiryDate)
         contentView.addSubview(descLabel)
         contentView.addSubview(titleLabel)
+        contentView.addSubview(missingView)
         contentView.addSubview(exclamationLabel)
         contentView.addSubview(exclamationView)
         
         
-        missingView.clipsToBounds = true
         missingView.isHidden = true
         missingView.translatesAutoresizingMaskIntoConstraints = false
         missingView.heightAnchor.constraint(equalTo: contentView.heightAnchor).isActive = true
         missingView.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
         missingView.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
         missingView.leftAnchor.constraint(equalTo: contentView.leftAnchor).isActive = true
+        missingView.layer.cornerRadius = 5
         missingView.backgroundColor = UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 0.6)
         
         imageView.clipsToBounds = true
