@@ -66,8 +66,6 @@ int16_t AccelX, AccelY, AccelZ, Temperature, GyroX, GyroY, GyroZ;
 int notag = 0;
 
 MFRC522 mfrc522(SS_PIN, RST_PIN);   // Create MFRC522 instance.
-int statuss = 0;
-int out = 0;
 
 void WiFiEvent(WiFiEvent_t event) {
   Serial.printf("[WiFi-event] event: %d\n", event);
@@ -163,13 +161,13 @@ void readAccel(){
     Serial.print("Az Range : ");Serial.println(AzPrev - AzNext);
     if (rangeAz >= 0.12 || rangeAz <= -0.12){
       Serial.print("Tas Diangkat");
-        if (Firebase.getInt("inventory/tasMove") == 0){
-          Firebase.set("inventory/tasMove", 1);
+        if (Firebase.getInt("tasMove") != 1){
+          Firebase.set("tasMove", 1);
           counterIdle = 0;
         }
     }else if (counterIdle == 10 && rangeAz <= 0.03 && rangeAz >= -0.03){
-        if (Firebase.getInt("inventory/tasMove") != 0){
-          Firebase.set("inventory/tasMove", 0);
+        if (Firebase.getInt("tasMove") != 0){
+          Firebase.set("tasMove", 0);
         }
     }
   }
