@@ -1,12 +1,6 @@
 /*
  *  Created by TheCircuit
 */
-
-
-#define SS_PIN D4  //D2
-#define RST_PIN D3 //D1
-
-
 #include <TimeLib.h>
 #include <ESP8266WiFi.h>
 #include <WiFiUdp.h>
@@ -20,9 +14,15 @@
 #define FIREBASE_HOST "smartbag-b64b8.firebaseio.com"
 #define FIREBASE_AUTH "idX9y5iDKOfRwrMVKghhHgAm1ykPywDYw9MjPsOa"
 
+//RFID Reader Pin
+#define SS_PIN D4  //D2
+#define RST_PIN D3 //D1
+
 // Wifi
 const char* ssid     = "Theex-HQ";
+//"Theex-HQ"; "FeelsBadMan"; "Lilian";
 const char* password = "JuraganPeceLyeye";
+//"JuraganPeceLyeye"; "jangkrik39A"; "qwertyui";
 
 // NTP Servers:
 static const char ntpServerName[] = "us.pool.ntp.org";
@@ -64,6 +64,9 @@ const uint8_t MPU6050_REGISTER_SIGNAL_PATH_RESET  = 0x68;
 
 int16_t AccelX, AccelY, AccelZ, Temperature, GyroX, GyroY, GyroZ;
 int notag = 0;
+bool inventoryIn;
+
+
 
 MFRC522 mfrc522(SS_PIN, RST_PIN);   // Create MFRC522 instance.
 
@@ -88,9 +91,11 @@ void setup()
   
   Serial.begin(9600);   // Initiate a serial communication
   while (!Serial) ; // Needed for Leonardo only
+  
   SPI.begin();      // Initiate  SPI bus
   mfrc522.PCD_Init();   // Initiate MFRC522
-
+  Serial.println("RFID Reader OK.");
+  
   Wire.begin(sda, scl);
   MPU6050_Init();
   // delete old config
@@ -117,12 +122,16 @@ void setup()
   Serial.println();
   Serial.println("Wait for WiFi... ");
   delay(100);
-  
+
+  pinMode(D0,OUTPUT);
+  pinMode(D8,OUTPUT);
   Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
   Firebase.stream("/");
 }
 void loop() 
 {
+  digitalWrite(D0, LOW);
+  digitalWrite(D8, LOW);
   if (timeStatus() != timeNotSet) {
     if (now() != prevDisplay) { //update the display only if time has changed
       prevDisplay = now();
@@ -138,6 +147,7 @@ void loop()
 double AxPrev, AyPrev, AzPrev, AxNext, AyNext, AzNext, rangeAz;
 int counterAccel = 0;
 int counterIdle = 0;
+
 void readAccel(){
   double Ax, Ay, Az;
   Read_RawValue(MPU6050SlaveAddress, MPU6050_REGISTER_ACCEL_XOUT_H);
@@ -161,9 +171,9 @@ void readAccel(){
     Serial.print("Az Range : ");Serial.println(AzPrev - AzNext);
     if (rangeAz >= 0.12 || rangeAz <= -0.12){
       Serial.print("Tas Diangkat");
+      counterIdle = 0;
         if (Firebase.getInt("tasMove") != 1){
           Firebase.set("tasMove", 1);
-          counterIdle = 0;
         }
     }else if (counterIdle == 10 && rangeAz <= 0.03 && rangeAz >= -0.03){
         if (Firebase.getInt("tasMove") != 0){
@@ -214,18 +224,27 @@ void sendUIDtoFirebase(String content){
     Firebase.set("inventory/"+content.substring(1)+"/status", 1);
     Firebase.setString("inventory/"+content.substring(1)+"/in/time", UIDTime);
     Serial.println("Inventory In, Status Data uploaded");
-    Serial.println(content.substring(0));
+    inventoryIn = true;
   }else{
     Firebase.set("inventory/"+content.substring(1)+"/status", 0);
     Firebase.setString("inventory/"+content.substring(1)+"/out/time", UIDTime);
     Serial.println("Inventory Out, Status Data uploaded");
+    inventoryIn = false;
   }
-  
-  delay(1000);
-  Serial.println();
+  statusLED();
   notag = 1;
+  Serial.println();
 }
 
+void statusLED(){
+  if(inventoryIn){
+    digitalWrite(D8, HIGH); //Lampu Hijau Menyala
+    delay(2000);
+  }else{
+    digitalWrite(D0, HIGH); //Lampu Merah Menyala
+    delay(2000);
+  }
+}
 
 void I2C_Write(uint8_t deviceAddress, uint8_t regAddress, uint8_t data) {
   Wire.beginTransmission(deviceAddress);
@@ -252,6 +271,7 @@ void Read_RawValue(uint8_t deviceAddress, uint8_t regAddress) {
 //configure MPU6050
 void MPU6050_Init() {
   delay(150);
+  Serial.println("MPU6050 OK.");
   I2C_Write(MPU6050SlaveAddress, MPU6050_REGISTER_SMPLRT_DIV, 0x07);
   I2C_Write(MPU6050SlaveAddress, MPU6050_REGISTER_PWR_MGMT_1, 0x01);
   I2C_Write(MPU6050SlaveAddress, MPU6050_REGISTER_PWR_MGMT_2, 0x00);
@@ -273,6 +293,8 @@ void printDigits(int digits)
     Serial.print('0');
   Serial.print(digits);
 }
+
+
 
 void digitalClockDisplay()
 {

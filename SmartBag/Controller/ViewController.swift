@@ -174,6 +174,7 @@ extension ViewController: UICollectionViewDelegate,UICollectionViewDataSource, U
         let dateIn = dateFormatter.date(from: inventoryrData.timeInDate!)
         dateFormatter.dateFormat = "HH:mm:ss"
         let newTimeIn = dateFormatter.string(from: dateIn!)
+        //check if item is missing
         if inventoryrData.isAdded!{
             inventoryCell.layer.shadowColor = UIColor(red: 226/255, green: 230/255, blue: 239/255, alpha: 1).cgColor
             inventoryCell.layer.shadowOffset = CGSize(width: 0, height: 1)
@@ -196,6 +197,8 @@ extension ViewController: UICollectionViewDelegate,UICollectionViewDataSource, U
             inventoryCell.exclamationView.isHidden = false
             inventoryCell.exclamationLabel.isHidden = false
         }
+        
+        
         inventoryCell.imageView.kf.setImage(with: url)
         inventoryCell.titleLabel.text = inventoryrData.nama!
         inventoryCell.descLabel.text = inventoryrData.deskripsi
