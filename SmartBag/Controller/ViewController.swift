@@ -48,7 +48,7 @@ class ViewController: UIViewController {
         collectionViews.backgroundColor = UIColor.white.withAlphaComponent(0)
         view.addSubview(collectionViews)
         collectionViews.translatesAutoresizingMaskIntoConstraints = false
-        collectionViews.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        collectionViews.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20).isActive = true
         collectionViews.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
         collectionViews.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         collectionViewsTopAnchor = collectionViews.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 10)
@@ -75,7 +75,7 @@ class ViewController: UIViewController {
             if snapshot.hasChild(date){
                 self.alertNoReminder.isHidden = true
                 self.collectionViewsTopAnchor?.isActive = false
-                self.collectionViewsTopAnchor = self.collectionViews.topAnchor.constraint(equalTo: self.headerView.bottomAnchor)
+                self.collectionViewsTopAnchor = self.collectionViews.topAnchor.constraint(equalTo: self.headerView.bottomAnchor, constant: 10)
                 self.collectionViewsTopAnchor?.isActive = true
                 dateRef.child(date).observe(.childAdded, with: { (snapshot) in
                     let inventoryID = snapshot.key
@@ -198,6 +198,13 @@ extension ViewController: UICollectionViewDelegate,UICollectionViewDataSource, U
             inventoryCell.exclamationLabel.isHidden = false
         }
         
+        if inventoryrData.nama?.uppercased() == "NAMA BARANG"{
+            inventoryCell.newItemView.image = UIImage(named: "rectangleGold")
+            inventoryCell.newItemLabel.text = "NEW ITEM !"
+        }else{
+            inventoryCell.newItemView.image = nil
+            inventoryCell.newItemLabel.text = ""
+        }
         
         inventoryCell.imageView.kf.setImage(with: url)
         inventoryCell.titleLabel.text = inventoryrData.nama!

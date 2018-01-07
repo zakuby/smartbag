@@ -44,6 +44,12 @@ class inventoryListCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
+    let newItemLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     
     let imageView: UIImageView = {
         let image = UIImageView()
@@ -76,6 +82,12 @@ class inventoryListCollectionViewCell: UICollectionViewCell {
     }()
     
     
+    let newItemView: UIImageView = {
+        let view = UIImageView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     override func awakeFromNib() {
         
         contentView.layer.shadowColor = UIColor(red: 226/255, green: 230/255, blue: 239/255, alpha: 1).cgColor
@@ -94,7 +106,23 @@ class inventoryListCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(missingView)
         contentView.addSubview(exclamationLabel)
         contentView.addSubview(exclamationView)
+        contentView.addSubview(newItemView)
+        newItemView.addSubview(newItemLabel)
         
+        newItemView.image = nil
+        newItemView.heightAnchor.constraint(equalToConstant: 25).isActive = true
+        newItemView.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.7).isActive = true
+        newItemView.topAnchor.constraint(equalTo: imageView.topAnchor).isActive = true
+        newItemView.leftAnchor.constraint(equalTo: imageView.leftAnchor).isActive = true
+        
+        newItemLabel.textColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 0.75)
+        newItemLabel.text = ""
+        newItemLabel.textAlignment = .left
+        newItemLabel.leftAnchor.constraint(equalTo: newItemView.leftAnchor, constant: 10).isActive = true
+        newItemLabel.centerYAnchor.constraint(equalTo: newItemView.centerYAnchor).isActive = true
+        newItemLabel.font = UIFont.init(name: "GothamBook", size: 12)
+        newItemLabel.sizeToFit()
+        newItemLabel.numberOfLines = 1
         
         missingView.isHidden = true
         missingView.translatesAutoresizingMaskIntoConstraints = false

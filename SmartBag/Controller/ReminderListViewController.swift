@@ -60,10 +60,19 @@ class ReminderListViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     override func viewWillDisappear(_ animated: Bool) {
-        rootRef.removeAllObservers()
+        //rootRef.removeAllObservers()
     }
     
     func observerUserReminder(){
+        //check if there is no reminder
+        rootRef.observe(.value) { (snapshot) in
+            if !snapshot.hasChild("reminders"){
+                self.emptyReminder.isHidden = false
+            }
+            DispatchQueue.main.async(execute: {
+                self.collectionViews.reloadData()
+            })
+        }
         reminders.removeAll()
         let ref = rootRef.child("reminders")
         ref.observe(.childAdded, with: { (snapshot) in

@@ -1,5 +1,5 @@
 /*
- *  Created by TheCircuit
+ *  Created by Muhammad Yaqub
 */
 #include <TimeLib.h>
 #include <ESP8266WiFi.h>
@@ -94,6 +94,7 @@ void setup()
   
   SPI.begin();      // Initiate  SPI bus
   mfrc522.PCD_Init();   // Initiate MFRC522
+  Serial.println();
   Serial.println("RFID Reader OK.");
   
   Wire.begin(sda, scl);
@@ -125,8 +126,12 @@ void setup()
 
   pinMode(D0,OUTPUT);
   pinMode(D8,OUTPUT);
+  Serial.println();
+  Serial.println("LED OK.");
   Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
   Firebase.stream("/");
+  Serial.println();
+  Serial.println("Firebase Stream OK.");
 }
 void loop() 
 {
