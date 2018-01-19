@@ -10,6 +10,7 @@
 		213A55FD70D704305C695DD1 /* Pods_SmartBag.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 609DCD4C6FE494D443923F74 /* Pods_SmartBag.framework */; };
 		840CCD8A1FC292F200EC526A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 840CCD891FC292F200EC526A /* GoogleService-Info.plist */; };
 		8421120E1FDC7A9E0071E619 /* ReminderListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8421120D1FDC7A9E0071E619 /* ReminderListViewController.swift */; };
+		846D62262006FA5B0064353F /* ScrollingFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846D62252006FA5B0064353F /* ScrollingFormViewController.swift */; };
 		84A5CD3D1FDDC71900198F29 /* Reminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84A5CD3C1FDDC71900198F29 /* Reminder.swift */; };
 		84BBB1C81FDDB848006AD797 /* ReminderList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84BBB1C71FDDB848006AD797 /* ReminderList.swift */; };
 		84CC3FA81FD37CC000699F52 /* DescViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CC3FA71FD37CC000699F52 /* DescViewController.swift */; };
@@ -28,6 +29,7 @@
 		609DCD4C6FE494D443923F74 /* Pods_SmartBag.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SmartBag.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		840CCD891FC292F200EC526A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8421120D1FDC7A9E0071E619 /* ReminderListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderListViewController.swift; sourceTree = "<group>"; };
+		846D62252006FA5B0064353F /* ScrollingFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollingFormViewController.swift; sourceTree = "<group>"; };
 		84A5CD3C1FDDC71900198F29 /* Reminder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reminder.swift; sourceTree = "<group>"; };
 		84BBB1C71FDDB848006AD797 /* ReminderList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderList.swift; sourceTree = "<group>"; };
 		84CC3FA71FD37CC000699F52 /* DescViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescViewController.swift; sourceTree = "<group>"; };
@@ -75,6 +77,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		846D62242006FA4F0064353F /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				846D62252006FA5B0064353F /* ScrollingFormViewController.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
 		84F6B3DE1FC2170900991C4D = {
 			isa = PBXGroup;
 			children = (
@@ -96,6 +106,7 @@
 		84F6B3E91FC2170900991C4D /* SmartBag */ = {
 			isa = PBXGroup;
 			children = (
+				846D62242006FA4F0064353F /* Extension */,
 				84F6B4011FC21D3600991C4D /* Views */,
 				84F6B3FE1FC21ADA00991C4D /* Controller */,
 				84F6B3FC1FC21AC700991C4D /* Model */,
@@ -295,6 +306,7 @@
 				84F6B4001FC21AEF00991C4D /* Inventory.swift in Sources */,
 				8421120E1FDC7A9E0071E619 /* ReminderListViewController.swift in Sources */,
 				84F6B3ED1FC2170900991C4D /* ViewController.swift in Sources */,
+				846D62262006FA5B0064353F /* ScrollingFormViewController.swift in Sources */,
 				84BBB1C81FDDB848006AD797 /* ReminderList.swift in Sources */,
 				84F6B3EB1FC2170900991C4D /* AppDelegate.swift in Sources */,
 				84A5CD3D1FDDC71900198F29 /* Reminder.swift in Sources */,

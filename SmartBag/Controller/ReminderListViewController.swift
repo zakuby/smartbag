@@ -99,9 +99,9 @@ class ReminderListViewController: UIViewController {
                         self.emptyReminder.isHidden = true
                         
                     }
-                    DispatchQueue.main.async(execute: {
-                        self.collectionViews.reloadData()
-                    })
+                DispatchQueue.main.async(execute: {
+                    self.collectionViews.reloadData()
+                })
                 })
                 
             })

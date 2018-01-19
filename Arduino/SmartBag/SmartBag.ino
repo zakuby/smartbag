@@ -1,5 +1,5 @@
 /*
- *  Created by Muhammad Yaqub
+    Created by Muhammad Yaqub
 */
 #include <TimeLib.h>
 #include <ESP8266WiFi.h>
@@ -15,8 +15,8 @@
 #define FIREBASE_AUTH "idX9y5iDKOfRwrMVKghhHgAm1ykPywDYw9MjPsOa"
 
 //RFID Reader Pin
-#define SS_PIN D4  //D2
-#define RST_PIN D3 //D1
+#define SS_PIN D4  
+#define RST_PIN D3
 
 // Wifi
 const char* ssid     = "Theex-HQ";
@@ -78,7 +78,7 @@ void WiFiEvent(WiFiEvent_t event) {
       Serial.println("WiFi connected");
       Serial.println("IP address: ");
       Serial.println(WiFi.localIP());
-      
+
       break;
     case WIFI_EVENT_STAMODE_DISCONNECTED:
       Serial.println("WiFi lost connection");
@@ -86,17 +86,17 @@ void WiFiEvent(WiFiEvent_t event) {
   }
 }
 
-void setup() 
+void setup()
 {
-  
+
   Serial.begin(9600);   // Initiate a serial communication
   while (!Serial) ; // Needed for Leonardo only
-  
+
   SPI.begin();      // Initiate  SPI bus
   mfrc522.PCD_Init();   // Initiate MFRC522
   Serial.println();
   Serial.println("RFID Reader OK.");
-  
+
   Wire.begin(sda, scl);
   MPU6050_Init();
   // delete old config
@@ -118,14 +118,14 @@ void setup()
   Serial.println("waiting for sync");
   setSyncProvider(getNtpTime);
   setSyncInterval(300);
-  
+
   Serial.println();
   Serial.println();
   Serial.println("Wait for WiFi... ");
   delay(100);
 
-  pinMode(D0,OUTPUT);
-  pinMode(D8,OUTPUT);
+  pinMode(D0, OUTPUT);
+  pinMode(D8, OUTPUT);
   Serial.println();
   Serial.println("LED OK.");
   Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
@@ -133,27 +133,22 @@ void setup()
   Serial.println();
   Serial.println("Firebase Stream OK.");
 }
-void loop() 
+void loop()
 {
   digitalWrite(D0, LOW);
   digitalWrite(D8, LOW);
-  if (timeStatus() != timeNotSet) {
-    if (now() != prevDisplay) { //update the display only if time has changed
-      prevDisplay = now();
-      digitalClockDisplay();
-    }
-  }
-  
+
+
   readAccel();
   delay(500);
   scanRFID();
 
-} 
+}
 double AxPrev, AyPrev, AzPrev, AxNext, AyNext, AzNext, rangeAz;
 int counterAccel = 0;
 int counterIdle = 0;
 
-void readAccel(){
+void readAccel() {
   double Ax, Ay, Az;
   Read_RawValue(MPU6050SlaveAddress, MPU6050_REGISTER_ACCEL_XOUT_H);
 
@@ -161,91 +156,97 @@ void readAccel(){
   Ax = (double)AccelX / AccelScaleFactor;
   Ay = (double)AccelY / AccelScaleFactor;
   Az = (double)AccelZ / AccelScaleFactor;
-  if (counterAccel == 0){
+  if (counterAccel == 0) {
     AxPrev = Ax;
     AzPrev = Az;
     AyPrev = Ay;
     counterAccel = 1;
-  }else if(counterAccel == 1){
+  } else if (counterAccel == 1) {
     AxNext = Ax;
     AzNext = Az;
     AyPrev = Ay;
     counterAccel = 0;
     counterIdle = counterIdle + 1;
     rangeAz = AzPrev - AzNext;
-    Serial.print("Az Range : ");Serial.println(AzPrev - AzNext);
-    if (rangeAz >= 0.12 || rangeAz <= -0.12){
+    Serial.print("Az Range : "); Serial.println(AzPrev - AzNext);
+    if (rangeAz >= 0.12 || rangeAz <= -0.12) {
       Serial.print("Tas Diangkat");
       counterIdle = 0;
-        if (Firebase.getInt("tasMove") != 1){
-          Firebase.set("tasMove", 1);
-        }
-    }else if (counterIdle == 10 && rangeAz <= 0.03 && rangeAz >= -0.03){
-        if (Firebase.getInt("tasMove") != 0){
-          Firebase.set("tasMove", 0);
-        }
+      if (Firebase.getInt("tasMove") != 1) {
+        Firebase.set("tasMove", 1);
+      }
+    } else if (counterIdle == 10 && rangeAz <= 0.03 && rangeAz >= -0.03) {
+      if (Firebase.getInt("tasMove") != 0) {
+        Firebase.set("tasMove", 0);
+      }
     }
   }
 }
 
-void scanRFID(){
+void scanRFID() {
   // Look for new cards
-  if ( ! mfrc522.PICC_IsNewCardPresent()) 
+  if ( ! mfrc522.PICC_IsNewCardPresent())
   {
     return;
   }
   // Select one of the cards
-  if ( ! mfrc522.PICC_ReadCardSerial()) 
+  if ( ! mfrc522.PICC_ReadCardSerial())
   {
     return;
   }
 
   getUIDtag();
-  
+
 }
 
 //Show UID on serial monitor
-void getUIDtag(){
+void getUIDtag() {
   Serial.println();
   Serial.print(" UID tag :");
-  String content= "";
+  String content = "";
   byte letter;
-  for (byte i = 0; i < mfrc522.uid.size; i++) 
+  for (byte i = 0; i < mfrc522.uid.size; i++)
   {
-     Serial.print(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " ");
-     Serial.print(mfrc522.uid.uidByte[i], HEX);
-     content.concat(String(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " "));
-     content.concat(String(mfrc522.uid.uidByte[i], HEX));
+    Serial.print(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " ");
+    Serial.print(mfrc522.uid.uidByte[i], HEX);
+    content.concat(String(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " "));
+    content.concat(String(mfrc522.uid.uidByte[i], HEX));
   }
   content.toUpperCase();
   Serial.println();
   sendUIDtoFirebase(content);
 }
 
-void sendUIDtoFirebase(String content){
+void sendUIDtoFirebase(String content) {
   String UIDTime = String(day()) + "-" + String(month()) + "-" + String(year()) + " " + String(hour()) + ":" + String(minute()) + ":" + String(second());
-  if (Firebase.getInt("inventory/"+content.substring(1)+"/status") == 0)
+  if (Firebase.getInt("inventory/" + content.substring(1) + "/status") == 0)
   {
-    Firebase.set("inventory/"+content.substring(1)+"/status", 1);
-    Firebase.setString("inventory/"+content.substring(1)+"/in/time", UIDTime);
+    Firebase.set("inventory/" + content.substring(1) + "/status", 1);
+    Firebase.setString("inventory/" + content.substring(1) + "/in/time", UIDTime);
     Serial.println("Inventory In, Status Data uploaded");
     inventoryIn = true;
-  }else{
-    Firebase.set("inventory/"+content.substring(1)+"/status", 0);
-    Firebase.setString("inventory/"+content.substring(1)+"/out/time", UIDTime);
+  } else {
+    Firebase.set("inventory/" + content.substring(1) + "/status", 0);
+    Firebase.setString("inventory/" + content.substring(1) + "/out/time", UIDTime);
     Serial.println("Inventory Out, Status Data uploaded");
     inventoryIn = false;
+  }
+  if (timeStatus() != timeNotSet) {
+    if (now() != prevDisplay) { //update the display only if time has changed
+      prevDisplay = now();
+      digitalClockDisplay();
+    }
   }
   statusLED();
   notag = 1;
   Serial.println();
 }
 
-void statusLED(){
-  if(inventoryIn){
+void statusLED() {
+  if (inventoryIn) {
     digitalWrite(D8, HIGH); //Lampu Hijau Menyala
     delay(2000);
-  }else{
+  } else {
     digitalWrite(D0, HIGH); //Lampu Merah Menyala
     delay(2000);
   }

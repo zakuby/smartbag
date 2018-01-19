@@ -11,8 +11,24 @@ import Firebase
 import Kingfisher
 import ObjectMapper
 
-class ReminderViewController: UIViewController {
-
+class ReminderViewController: ScrollingFormViewController {
+    
+    override func setupView() {
+        super.setupView()
+        
+        self.headerHeightLayoutConstraint = headerHeight
+        self.keyboardHeightLayoutConstraint = kBHConstraint
+        hideKeyboardWhenTappedAround()
+        setupCollectionView()
+        editReminder()
+        observerUserInventory()
+        createDatePicker()
+        
+        self.hideKeyboardWhenTappedAround()
+    }
+    
+    @IBOutlet weak var headerHeight: NSLayoutConstraint!
+    @IBOutlet weak var kBHConstraint: NSLayoutConstraint!
     @IBOutlet weak var reminderTitle: UILabel!
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var dateTxtField: UITextField!
@@ -55,15 +71,7 @@ class ReminderViewController: UIViewController {
     var addID = [String]()
     var removeID = [String]()
     var getDate: String?
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        hideKeyboardWhenTappedAround()
-        setupCollectionView()
-        editReminder()
-        observerUserInventory()
-        createDatePicker()
-        // Do any additional setup after loading the view.
-    }
+    
     
     @objc func textFieldDidChange(_ textField: UITextField) {
         print(textField.text)

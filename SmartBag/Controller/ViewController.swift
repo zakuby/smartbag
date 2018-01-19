@@ -87,9 +87,9 @@ class ViewController: UIViewController {
                             let data = Mapper<Inventory>().map(JSONObject: lJsonArray)
                             if let index:Int = self.inventorys.index(where: {$0.ID == idTag}) {
                                 if self.inventorys[index].status == 0{
-                                    print("You are missing: " + self.inventorys[index].nama!)
+//                                    print("You are missing: " + self.inventorys[index].nama!)
                                 }else{
-                                    print("Found: " + self.inventorys[index].nama!)
+//                                    print("Found: " + self.inventorys[index].nama!)
                                 }
                             }else{
                                 self.inventorys.append(InventoryList(added: false, desc: data?.deskripsi ?? "Deskripsi Barang",imgUrl: data?.imageUrl ?? "https://firebasestorage.googleapis.com/v0/b/smartbag-b64b8.appspot.com/o/noimage.png?alt=media&token=91a48b54-6e2e-43d1-8274-c66d2c679ee1",name: data?.name ?? "Nama Barang" ,inventID: idTag, stat: (data?.status)!, timeOut: data?.timeOut ?? "01-01-1980 00:00:00", timeIn: data?.timeIn ?? "01-01-1980 00:00:00" ))

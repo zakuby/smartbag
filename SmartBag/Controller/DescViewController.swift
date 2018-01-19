@@ -11,8 +11,56 @@ import Firebase
 import FirebaseStorage
 import Kingfisher
 
-class DescViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class DescViewController: ScrollingFormViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    
+    
+    @IBOutlet weak var headerHeight: NSLayoutConstraint!
+    @IBOutlet weak var keyboardConstraint: NSLayoutConstraint!
+    
+    override func setupView() {
+        super.setupView()
+        
+        self.headerHeightLayoutConstraint = headerHeight
+        self.keyboardHeightLayoutConstraint = keyboardConstraint
+        hideKeyboardWhenTappedAround()
+        changeImageButton.layer.shadowColor = UIColor.black.cgColor
+        changeImageButton.layer.shadowOffset = CGSize(width: 2.5, height: 2.5)
+        changeImageButton.layer.shadowOpacity = 0.5
+        changeImageButton.layer.shadowRadius = 1
+        let idRef = rootRef.child("inventory").child(getID!)
+        idRef.observe(.value) { (data) in
+            if let dictionary = data.value as? [String: Any]{
+                
+                if dictionary["nama"] != nil{
+                    self.descTitle.text = dictionary["nama"]! as? String
+                }
+                
+                if dictionary["imageUrl"] != nil{
+                    let url = URL(string: (dictionary["imageUrl"]! as? String)!)
+                    self.descImage.kf.setImage(with: url)
+                }else{
+                    let url = URL(string: "https://firebasestorage.googleapis.com/v0/b/smartbag-b64b8.appspot.com/o/noimage.png?alt=media&token=91a48b54-6e2e-43d1-8274-c66d2c679ee1")
+                    self.descImage.kf.setImage(with: url)
+                }
+                
+                if dictionary["deskripsi"] != nil{
+                    self.descText.text = dictionary["deskripsi"]! as? String
+                }
+                
+            }
+        }
+        descText.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
+        descText.textContainer.lineFragmentPadding = 0
+        descText.textContainerInset = .zero
 
+        
+        
+        self.hideKeyboardWhenTappedAround()
+    }
+    
+    
+    
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         var selectedImageFromPicker: UIImage?
@@ -87,55 +135,7 @@ class DescViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         return .lightContent
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        hideKeyboardWhenTappedAround()
-        changeImageButton.layer.shadowColor = UIColor.black.cgColor
-        changeImageButton.layer.shadowOffset = CGSize(width: 2.5, height: 2.5)
-        changeImageButton.layer.shadowOpacity = 0.5
-        changeImageButton.layer.shadowRadius = 1
-        let idRef = rootRef.child("inventory").child(getID!)
-        idRef.observe(.value) { (data) in
-            if let dictionary = data.value as? [String: Any]{
-                
-                if dictionary["nama"] != nil{
-                    self.descTitle.text = dictionary["nama"]! as? String
-                }
-                
-                if dictionary["imageUrl"] != nil{
-                    let url = URL(string: (dictionary["imageUrl"]! as? String)!)
-                    self.descImage.kf.setImage(with: url)
-                }else{
-                    let url = URL(string: "https://firebasestorage.googleapis.com/v0/b/smartbag-b64b8.appspot.com/o/noimage.png?alt=media&token=91a48b54-6e2e-43d1-8274-c66d2c679ee1")
-                     self.descImage.kf.setImage(with: url)
-                }
-                
-                if dictionary["deskripsi"] != nil{
-                    self.descText.text = dictionary["deskripsi"]! as? String
-                }
-                
-            }
-        }
-        descText.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
-        descText.textContainer.lineFragmentPadding = 0
-        descText.textContainerInset = .zero
-        // Do any additional setup after loading the view.
-    }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
